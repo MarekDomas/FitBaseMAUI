@@ -9,14 +9,14 @@
             Padding="0,0"
             VerticalOptions="Center" >
 
-            
+            <Label x:Name="DebugL" FontSize="25"/>
 
             <Label HorizontalOptions="Center" FontSize="25" Text="Name"/>
             <Entry x:Name="LoginE" WidthRequest="175"/>
             <Label Text="Password" FontSize="25" HorizontalOptions="Center"/>
             <Entry x:Name="PasswdE" WidthRequest="175"/>
 
-            <HorizontalStackLayout HorizontalOptions="Center">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="40">
                 <Button x:Name="RegisterB"  WidthRequest="85" Text="Register" Clicked="RegisterB_Clicked"/>
                 <Button x:Name="Login" Text="Login" WidthRequest="85" Clicked="Login_Clicked"/>
             </HorizontalStackLayout>

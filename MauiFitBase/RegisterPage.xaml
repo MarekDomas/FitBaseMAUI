@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiFitBase.RegisterPage"
+             Title="RegisterPage">
+    
+    <VerticalStackLayout 
+            Spacing="25"
+            Padding="0,140" >
+
+        <Label Text="Your user Name" FontSize="25" HorizontalOptions="Center"/>
+        <Entry x:Name="NewUserNameE" WidthRequest="175"/>
+        <Label Text="Your new password" FontSize="25" HorizontalOptions="Center"/>
+        <Entry x:Name="NewPasswdE" WidthRequest="175"/>
+        <Label Text="Your new password again" FontSize="25" HorizontalOptions="Center"/>
+        <Entry x:Name="AgainPasswdE" WidthRequest="175"/>
+
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="40">
+            <Button x:Name="DoneB" Clicked="DoneB_Clicked" Text="Done" WidthRequest="75"/>
+            <Button x:Name="CancelB" Clicked="CancelB_Clicked" Text="Cancel" WidthRequest="75"/>
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+</ContentPage>

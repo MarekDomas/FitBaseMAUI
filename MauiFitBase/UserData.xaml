@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiFitBase.UserData"
+             Title="UserData" WidthRequest="1200">
+
+    <ScrollView>
+        <VerticalStackLayout >
+            <HorizontalStackLayout Spacing="800">
+                <Button x:Name="SignOut" Margin="50" Text="Sign out" Clicked="SignOut_Clicked"/>
+                <Label  Text="Prdel krek" x:Name="UserInfo" VerticalOptions="Center" HorizontalOptions="Center" FontSize="25" TextColor="White"/>
+            </HorizontalStackLayout>
+
+            <ListView WidthRequest="450" HeightRequest="500" BackgroundColor="Gray" HorizontalOptions="Start" Margin="50,5"/>
+
+            <Button x:Name="AddTrainnigB" Text="Add training" Clicked="AddTrainnigB_Clicked" WidthRequest="110" HorizontalOptions="End" Margin="50,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
