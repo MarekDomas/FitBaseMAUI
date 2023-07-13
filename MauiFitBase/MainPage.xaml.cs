@@ -19,6 +19,7 @@ public partial class MainPage : ContentPage , MyFunctions
 
     private void Login_Clicked(object sender, EventArgs e)
     {
+        //Vytvoření DB a připojení k ní
         var connectionString = "Data Source=Users.db;";
         var connection = new SqliteConnection(connectionString);
         connection.Open();
@@ -26,13 +27,22 @@ public partial class MainPage : ContentPage , MyFunctions
         command.CommandText = "PRAGMA key='your-secret-key';";
         command.ExecuteNonQuery();
 
+        //Vytvoří tabulku s uživateli 
         command.CommandText = "CREATE TABLE IF NOT EXISTS Users(id INTEGER PRIMARY KEY, UserName TEXT, UserPasswd TEXT)";
         command.ExecuteNonQuery();
 
-        List<User> Users = new List<User>();
-        List<string> UserNames = new List<string>();
+        command.CommandText = "CREATE TABLE IF NOT EXISTS Training(id INTEGER PRIMARY KEY, NameOfTraining TEXT, DateOfTraining DATE, OwnerOfTraining TEXT)";
+        command.ExecuteNonQuery();
 
-        // Query the data
+        command.CommandText = "DELETE FROM Training WHERE NameOfTraining = 'Trenink1'";
+        command.ExecuteNonQuery();
+
+        command.CommandText = "INSERT INTO Training( NameOfTraining, DateOfTraining, OwnerOfTraining) VALUES ( 'Trenink1', '2023-07-13' , 'Marek')";
+        command.ExecuteNonQuery();
+
+        List<User> Users = new List<User>();
+        
+        // Načte data do listu
         command.CommandText = "SELECT * FROM Users";
         using (var reader = command.ExecuteReader())
         {
@@ -43,25 +53,24 @@ public partial class MainPage : ContentPage , MyFunctions
                 var UserPasswd = reader.GetString(2);
                 User U = new User(id, UserName, UserPasswd);
                 Users.Add(U);
-
-                DebugL.Text += U + " ";
-
-                UserNames.Add(UserName);
             }
         }
 
+        //Samotné přihlášení. Proiteruje se celý list a pokud se tam uživatel najde tak je přihlášní úspěšné
         bool loginSuccefull = false;
         foreach (User user in Users)
         {
             loginSuccefull = false;
             if(LoginE.Text == user.Name && PasswdE.Text == user.Passwd)
             {
-                UserData UD = new UserData(user);
+                UserData UD = new UserData(user,null);
                 App.Current.MainPage = UD;
                 loginSuccefull = true;
                 break;
             }
         }
+
+        //Kdyby to nebylo v podmínce, alert by vyskočil i po úspěšném přihlášení
         if (!loginSuccefull)
         {
             DisplayAlert("Cannot sign in", "User name or password is wrong","OK");

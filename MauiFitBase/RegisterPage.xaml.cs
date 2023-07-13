@@ -13,8 +13,6 @@ public partial class RegisterPage : ContentPage, MyFunctions
 
     private void DoneB_Clicked(object sender, EventArgs e)
     {
-        
-
         //Vytvoøí databázy s uživateli a nahraje je do listu
         var connectionString = "Data Source=Users.db;";
         var connection = new SqliteConnection(connectionString);
@@ -22,11 +20,7 @@ public partial class RegisterPage : ContentPage, MyFunctions
         var command = connection.CreateCommand();
         command.CommandText = "PRAGMA key='your-secret-key';";
         command.ExecuteNonQuery();
-
-        command.CommandText = "CREATE TABLE IF NOT EXISTS Users(id INTEGER PRIMARY KEY, UserName TEXT, UserPasswd TEXT)";
-        command.ExecuteNonQuery();
-
-       
+               
         List<string> UserNames = new List<string>();
 
         // Query the data
@@ -40,7 +34,6 @@ public partial class RegisterPage : ContentPage, MyFunctions
                 var UserPasswd = reader.GetString(2);
                 User U = new User(id, UserName, UserPasswd);
 
-         
                 UserNames.Add(UserName);
             }
         }
@@ -65,6 +58,7 @@ public partial class RegisterPage : ContentPage, MyFunctions
             DisplayAlert("Fill in passwords", "Enter your password", "OK");
             ClearEntry();
         }
+        //Uspìšné vytvoøení úètu
         if (!UserNames.Contains(NewUserNameE.Text) && NewPasswdE.Text == AgainPasswdE.Text && !String.IsNullOrWhiteSpace(NewUserNameE.Text) && !String.IsNullOrWhiteSpace(NewPasswdE.Text) && !String.IsNullOrWhiteSpace(AgainPasswdE.Text))
         {
             User NewUser = new User(UserNames.Count,NewUserNameE.Text, AgainPasswdE.Text);
@@ -83,6 +77,7 @@ public partial class RegisterPage : ContentPage, MyFunctions
         App.Current.MainPage = MP;
     }
 
+    //Nuluje vstupy 
     public void ClearEntry()
     {
         NewPasswdE.Text = "";

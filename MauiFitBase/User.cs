@@ -13,6 +13,8 @@
             Passwd = aPasswd;
         }
 
+        public User() { }
+
         public override string ToString()
         {
             return $"id: {Id} Name: {Name} Passwd: {Passwd}";
