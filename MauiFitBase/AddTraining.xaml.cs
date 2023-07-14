@@ -6,17 +6,61 @@ namespace MauiFitBase;
 public partial class AddTraining : ContentPage
 {
     User U = new User();
-	public AddTraining(User u)
+    List<Lift> Lifts= new List<Lift>();
+	public AddTraining(User u, DateTime? selectedDate, string? nameOfTraining, Lift? l)
 	{
+        var connectionString = "Data Source=Users.db;";
+        var connection = new SqliteConnection(connectionString);
+        connection.Open();
+        var command = connection.CreateCommand();
+        command.CommandText = "PRAGMA key='your-secret-key';";
+        command.ExecuteNonQuery();
+
+        
+
         U = u;
 		InitializeComponent();
+        using (var reader = command.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                var id = reader.GetInt32(0);
+                var ogTraining = reader.GetString(1);
+                var ownerOfTraining = reader.GetString(2);
+                var Type = reader.GetString(3);
+                var sets = reader.GetInt32(4);
+                var reps = reader.GetInt32(5);
+                var weight = reader.GetFloat(6);
+                Lift lift = new Lift(id, ogTraining, ownerOfTraining, Type, sets, reps, weight);
+
+                if (lift.OwnerOfLift == U.Name && lift.OgTraining == TraingNameE.Text)
+                {
+                    Lifts.Add(lift);
+                }
+            }
+        }
+
+        if (selectedDate != null)
+        {
+            DateSelector.Date = (DateTime)selectedDate;
+        }
+        if (nameOfTraining != null)
+        {
+            TraingNameE.Text = nameOfTraining;
+        }
+        if(l != null)
+        {
+            Lifts.Add(l);
+        }
+        Seznam.ItemsSource = Lifts;
 	}
 
     
 
     private void AddLiftsB_Clicked(object sender, EventArgs e)
     {
-
+        AddLift AL = new AddLift(U,TraingNameE.Text,DateSelector.Date);
+        App.Current.MainPage = AL;
     }
 
     private void DoneB_Clicked(object sender, EventArgs e)

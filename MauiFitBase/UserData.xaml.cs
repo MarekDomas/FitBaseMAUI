@@ -67,7 +67,7 @@ public partial class UserData : ContentPage
 
     private void AddTrainnigB_Clicked(object sender, EventArgs e)
     {
-        AddTraining AT = new AddTraining(U);
+        AddTraining AT = new AddTraining(U, null,null,null);
         App.Current.MainPage = AT;
     }
 

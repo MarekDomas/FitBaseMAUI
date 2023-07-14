@@ -1,14 +1,68 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace MauiFitBase;
 
 public partial class MainPage : ContentPage , MyFunctions
 {
-	
 
-	public MainPage()
+    string[] cviky = {
+                        "Dřep s činkou",
+                        "Mrtvý tah",
+                        "Benčpress",
+                        "Ramenní tlak",
+                        "Veslování",
+                        "Log lift",
+                        "Curl s činkami",
+                        "Tricepsová extenze",
+                        "Hammer curl",
+                        "Kabelový fly",
+                        "Leg press",
+                        "Stahování na lýtkové svaly",
+                        "Hip thrust",
+                        "Glute bridge",
+                        "Výpady",
+                        "Step-up",
+                        "Rumunský mrtvý tah",
+                        "Good morning",
+                        "Cable pull-through",
+                        "Rows v sedě",
+                        "Pulldown",
+                        "Přístroj na tlak hrudníku",
+                        "Přístroj na ramenní tlak",
+                        "Předkopy",
+                        "Přístroj na hamstringy",
+                        "Přístroj na svaly břicha",
+                        "Russian twist",
+                        "Medicinbalový slam",
+                        "Bitevní provaz",
+                        "Švihadlo",
+                        "Kettlebell swing",
+                        "Farmářská chůze",
+                        "Tahání/tlačení saní",
+                        "Převrácení pneumatiky"
+                    };
+    
+
+    string liftsFile= $@"C:\Users\{Environment.UserName}\Documents\Lifts.xml";
+    public MainPage()
 	{
-		InitializeComponent();
+        if (!File.Exists(liftsFile))
+        {
+            using (FileStream fs = File.Create(liftsFile))
+            {
+                byte[] content = Encoding.UTF8.GetBytes("");
+                fs.Write(content, 0, content.Length);
+            }
+        }
+
+        XmlSerializer serializer = new XmlSerializer(typeof(string[]));
+        using (TextWriter writer = new StreamWriter(liftsFile))
+        {
+            serializer.Serialize(writer, cviky);
+        }
+        InitializeComponent();
 	}
 
     public void ClearEntry()
@@ -32,6 +86,9 @@ public partial class MainPage : ContentPage , MyFunctions
         command.ExecuteNonQuery();
 
         command.CommandText = "CREATE TABLE IF NOT EXISTS Training(id INTEGER PRIMARY KEY, NameOfTraining TEXT, DateOfTraining DATE, OwnerOfTraining TEXT)";
+        command.ExecuteNonQuery();
+
+        command.CommandText = "CREATE TABLE IF NOT EXISTS Lift(id INTEGER PRIMARY KEY, NameOfTraining TEXT, OwnerOfTraining TEXT, TypeOfLift TEXT, Sets INTEGER, Reps INTEGER, Weight FLOAT)";
         command.ExecuteNonQuery();
 
         command.CommandText = "DELETE FROM Training WHERE NameOfTraining = 'Trenink1'";

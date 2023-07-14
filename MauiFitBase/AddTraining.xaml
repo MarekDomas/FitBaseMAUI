@@ -9,8 +9,21 @@
         <Label Text="Enter name of your training" FontSize="25" Margin="100,90"/>
         <Entry x:Name="TraingNameE" WidthRequest="200" HorizontalOptions="Start" Margin="100,-60"/>
 
-        <ListView WidthRequest="450" HeightRequest="500" IsVisible="true" BackgroundColor="Gray" HorizontalOptions="End" Margin="100,-180"/>
-        
+        <ListView WidthRequest="450" HeightRequest="500" x:Name="Seznam" IsVisible="true" BackgroundColor="Gray" HorizontalOptions="End" Margin="100,-180">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" Spacing="10">
+                            <Label Text="{Binding Type}" FontAttributes="Bold" />
+                            <Label Text="{Binding Sets}"/>
+                            <Label Text="{Binding Reps}"/>
+                            <Label Text="{Binding Weight}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
         <Button Text="Add lifts" x:Name="AddLiftsB" Clicked="AddLiftsB_Clicked" WidthRequest="90" HorizontalOptions="End" Margin="580,50"/>
         <Button Text="Remove lift" x:Name="RemoveLiftB" Clicked="RemoveLiftB_Clicked" WidthRequest="110" Margin="580,-10" HorizontalOptions="End"/>
         <Button Text="Done" x:Name="DoneB" Clicked="DoneB_Clicked" WidthRequest="100" HorizontalOptions="Start" Margin="100,0"/>

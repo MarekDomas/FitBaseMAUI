@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiFitBase.AddLift"
+             Title="AddLift">
+    <VerticalStackLayout  >
+        <Label Text="Pick a lift" HorizontalOptions="Center" FontSize="25" Margin="0,50"/>
+        <Picker x:Name="LiftPicker" WidthRequest="170" HorizontalOptions="Center" BackgroundColor="Gray" Margin="0,-50"/>
+        <Label Text="Number of sets" HorizontalOptions="Center" FontSize="25" Margin="0,80"/>
+        <Entry x:Name="SetsE" WidthRequest="60" HorizontalOptions="Center" Margin="0,-50"/>
+        <Label Text="Number of reps" FontSize="25" HorizontalOptions="Center" Margin="0,80"/>
+        <Entry x:Name="RepsE" WidthRequest="60" HorizontalOptions="Center" Margin="0,-50"/>
+        <Label Text="Weight (Kg)" HorizontalOptions="Center" Margin="0,80" FontSize="25"/>
+        <Entry x:Name="WeightE" WidthRequest="60" HorizontalOptions="Center" Margin="0,-50"/>
+        <Button Text="Done" WidthRequest="75" x:Name="DoneB" Clicked="DoneB_Clicked" Margin="0,80" />
+    </VerticalStackLayout>
+</ContentPage>

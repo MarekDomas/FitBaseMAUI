@@ -14,7 +14,7 @@
             <Label HorizontalOptions="Center" FontSize="25" Text="Name"/>
             <Entry x:Name="LoginE" WidthRequest="175"/>
             <Label Text="Password" FontSize="25" HorizontalOptions="Center"/>
-            <Entry x:Name="PasswdE" WidthRequest="175"/>
+            <Entry x:Name="PasswdE" IsPassword="True" WidthRequest="175"/>
 
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="40">
                 <Button x:Name="RegisterB"  WidthRequest="85" Text="Register" Clicked="RegisterB_Clicked"/>
