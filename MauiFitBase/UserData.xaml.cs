@@ -95,7 +95,8 @@ public partial class UserData : ContentPage
 
     private void CreateExcersiseB_Clicked(object sender, EventArgs e)
     {
-
+        CreateExcersise CE = new CreateExcersise();
+        App.Current.MainPage = CE;
     }
 
     private void DeleteExcersiseB_Clicked(object sender, EventArgs e)

@@ -120,6 +120,21 @@ public partial class MainPage : ContentPage , MyFunctions
             loginSuccefull = false;
             if(LoginE.Text == user.Name && PasswdE.Text == user.Passwd)
             {
+                string UserExcersisesFile = $@"C:\Users\{Environment.UserName}\Documents\{user.Name}Lifts.xml";
+                if (!File.Exists(UserExcersisesFile))
+                {
+                    using (FileStream fs = File.Create(UserExcersisesFile))
+                    {
+                        byte[] content = Encoding.UTF8.GetBytes("");
+                        fs.Write(content, 0, content.Length);
+                    }
+                    XmlSerializer serializer = new XmlSerializer(typeof(string[]));
+                    using (TextWriter writer = new StreamWriter(UserExcersisesFile))
+                    {
+                        serializer.Serialize(writer, cviky);
+                    }
+                }
+
                 UserData UD = new UserData(user,null);
                 App.Current.MainPage = UD;
                 loginSuccefull = true;

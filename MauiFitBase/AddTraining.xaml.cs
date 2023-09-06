@@ -20,6 +20,8 @@ public partial class AddTraining : ContentPage
 
         U = u;
 		InitializeComponent();
+
+        command.CommandText = "SELECT * FROM Lift";
         using (var reader = command.ExecuteReader())
         {
             while (reader.Read())
