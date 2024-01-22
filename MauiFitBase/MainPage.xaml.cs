@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace MauiFitBase;
 
-public partial class MainPage : ContentPage , MyFunctions
+public partial class MainPage : ContentPage 
 {
 
     string[] cviky = {

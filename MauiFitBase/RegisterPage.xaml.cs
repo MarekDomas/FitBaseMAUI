@@ -2,7 +2,7 @@ using Microsoft.Data.Sqlite;
 
 namespace MauiFitBase;
 
-public partial class RegisterPage : ContentPage, MyFunctions
+public partial class RegisterPage : ContentPage
 {
      
 

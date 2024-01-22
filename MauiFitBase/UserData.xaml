@@ -26,8 +26,7 @@
 
             <Button x:Name="AddTrainnigB" Text="Add training" Clicked="AddTrainnigB_Clicked" WidthRequest="110" HorizontalOptions="End" Margin="70,0"/>
             <Button x:Name="DeleteTrainingB" Text="Delete training" WidthRequest="130" Margin="50,-120" HorizontalOptions="End" Clicked="DeleteTrainingB_Clicked"/>
-            <Button x:Name="CreateExcersiseB" Text="Create excersise" WidthRequest="140" Margin="41,-10" HorizontalOptions="End" Clicked="CreateExcersiseB_Clicked"/>
-            <Button x:Name="DeleteExcersiseB" Text="Delete excecrsise" WidthRequest="145" HorizontalOptions="End" Margin="36,-110" Clicked="DeleteExcersiseB_Clicked"/>
+            <Button x:Name="EditTrBtn" Text="Edit training" WidthRequest="130" Margin="50,0" HorizontalOptions="End" Clicked="EditTrBtn_Clicked"/>
 
         </VerticalStackLayout>
     </ScrollView>

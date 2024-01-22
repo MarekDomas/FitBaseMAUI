@@ -7,7 +7,8 @@ public partial class AddTraining : ContentPage
 {
     User U = new User();
     List<Lift> Lifts= new List<Lift>();
-	public AddTraining(User u, DateTime? selectedDate, string? nameOfTraining, Lift? l)
+    bool isEdit = false;
+	public AddTraining(User u, DateTime? selectedDate, string? nameOfTraining, Lift? l, bool IsEdit)
 	{
         var connectionString = "Data Source=Users.db;";
         var connection = new SqliteConnection(connectionString);
@@ -15,27 +16,38 @@ public partial class AddTraining : ContentPage
         var command = connection.CreateCommand();
         command.CommandText = "PRAGMA key='your-secret-key';";
         command.ExecuteNonQuery();
+        isEdit = IsEdit;
 
-        
+		InitializeComponent();
+        //Vypne nìkteré komponenty pøi editu
+        if (IsEdit)
+        {
+            DateSelector.IsEnabled = false;
+            TraingNameE.IsEnabled = false;
+        }
 
         U = u;
-		InitializeComponent();
-
+        if (nameOfTraining != null)
+        {
+            TraingNameE.Text = nameOfTraining;
+        }
+        string TrainingName = TraingNameE.Text;
+        //Nahraje cviky v tréninku
         command.CommandText = "SELECT * FROM Lift";
         using (var reader = command.ExecuteReader())
         {
             while (reader.Read())
             {
                 var id = reader.GetInt32(0);
-                var ogTraining = reader.GetString(1);
+                var OgTraining = reader.GetString(1);
                 var ownerOfTraining = reader.GetString(2);
                 var Type = reader.GetString(3);
                 var sets = reader.GetInt32(4);
                 var reps = reader.GetInt32(5);
                 var weight = reader.GetFloat(6);
-                Lift lift = new Lift(id, ogTraining, ownerOfTraining, Type, sets, reps, weight);
+                Lift lift = new Lift(id, OgTraining, ownerOfTraining, Type, sets, reps, weight);
 
-                if (lift.OwnerOfLift == U.Name && lift.OgTraining == TraingNameE.Text)
+                if (lift.OwnerOfLift == U.Name && lift.OgTraining == TrainingName)
                 {
                     Lifts.Add(lift);
                 }
@@ -46,14 +58,7 @@ public partial class AddTraining : ContentPage
         {
             DateSelector.Date = (DateTime)selectedDate;
         }
-        if (nameOfTraining != null)
-        {
-            TraingNameE.Text = nameOfTraining;
-        }
-        if(l != null)
-        {
-            Lifts.Add(l);
-        }
+        
         Seznam.ItemsSource = Lifts;
 	}
 
@@ -61,7 +66,7 @@ public partial class AddTraining : ContentPage
 
     private void AddLiftsB_Clicked(object sender, EventArgs e)
     {
-        AddLift AL = new AddLift(U,TraingNameE.Text,DateSelector.Date);
+        AddLift AL = new AddLift(U,TraingNameE.Text,DateSelector.Date, isEdit);
         App.Current.MainPage = AL;
     }
 
@@ -101,7 +106,12 @@ public partial class AddTraining : ContentPage
             DisplayAlert("NameOfTrainingMissing", "Enter name of training", "OK");
             IsSuccesfull = false;
         }
-        if (Trainings.Contains(TraingNameE.Text))
+        if (Trainings.Contains(TraingNameE.Text) && isEdit)
+        {
+            UserData UD = new UserData(U, null);
+            App.Current.MainPage = UD;
+        }
+        else if (Trainings.Contains(TraingNameE.Text))
         {
             DisplayAlert("TrainingAlreadyExists", "Training with this name already exists, choose different name", "OK");
             TraingNameE.Text = "";
@@ -109,6 +119,7 @@ public partial class AddTraining : ContentPage
         }
         if (IsSuccesfull)
         {
+            //Pøi úspìchu vytvoøí trénink
             Training T = new Training(0,TraingNameE.Text,U.Name, DateOnly.FromDateTime(DateSelector.Date));
             UserData UD = new UserData(U,T);
             command.CommandText = $"INSERT INTO Training( NameOfTraining, DateOfTraining, OwnerOfTraining) VALUES ( '{T.NameOfTraining}', '{T.DateOfTraining}' , '{U.Name}')";
@@ -120,6 +131,29 @@ public partial class AddTraining : ContentPage
 
     private void RemoveLiftB_Clicked(object sender, EventArgs e)
     {
+        Lift deLift = Seznam.SelectedItem as Lift;
+        if (deLift != null)
+        {
+            var connectionString = "Data Source=Users.db;";
+            var connection = new SqliteConnection(connectionString);
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = "PRAGMA key='your-secret-key';";
+            command.ExecuteNonQuery();
 
+            Lifts.Remove(deLift);
+            refresh();
+
+            command.CommandText = $"DELETE FROM Lift WHERE id = ({deLift.Id})";
+            command.ExecuteNonQuery();
+            connection.Close();
+
+        }
+    }
+
+    private void refresh()
+    {
+        Seznam.ItemsSource = null;
+        Seznam.ItemsSource = Lifts;
     }
 }

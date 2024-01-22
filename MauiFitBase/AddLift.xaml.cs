@@ -11,9 +11,11 @@ public partial class AddLift : ContentPage
     DateTime? DatumTreninku = null;
     string liftsFile = $@"C:\Users\{Environment.UserName}\Documents\Lifts.xml";
     string[] liftTypes = new string[] { };
+    bool fromEdit = false;
 
-    public AddLift(User u, string? TrainingOg, DateTime? Datum)
+    public AddLift(User u, string? TrainingOg, DateTime? Datum, bool FromEdit)
 	{
+        //Nahraje typy cvikù do pickeru
         XmlSerializer serializer = new XmlSerializer(typeof(string[]));
         using (StreamReader reader = new StreamReader(liftsFile))
         {
@@ -24,6 +26,7 @@ public partial class AddLift : ContentPage
         NameOfTraining = TrainingOg;
 		InitializeComponent();
         LiftPicker.ItemsSource = liftTypes;
+        fromEdit = FromEdit;
 	}
 
     private void DoneB_Clicked(object sender, EventArgs e)
@@ -36,29 +39,29 @@ public partial class AddLift : ContentPage
         command.CommandText = "PRAGMA key='your-secret-key';";
         command.ExecuteNonQuery();
 
-        command.CommandText = "SELECT * FROM Lift";
+        //command.CommandText = "SELECT * FROM Lift";
 
-        List<Lift> Lifts = new List<Lift>();
+        //List<Lift> Lifts = new List<Lift>();
 
-        using (var reader = command.ExecuteReader())
-        {
-            while (reader.Read())
-            {
-                var id = reader.GetInt32(0);
-                var ogTraining = reader.GetString(1);
-                var ownerOfTraining = reader.GetString(2);
-                var Type = reader.GetString(3);
-                var sets = reader.GetInt32(4);
-                var reps = reader.GetInt32(5);
-                var weight = reader.GetFloat(6);
-                Lift lift = new Lift(id, ogTraining, ownerOfTraining, Type, sets, reps, weight);
+        //using (var reader = command.ExecuteReader())
+        //{
+        //    while (reader.Read())
+        //    {
+        //        var id = reader.GetInt32(0);
+        //        var ogTraining = reader.GetString(1);
+        //        var ownerOfTraining = reader.GetString(2);
+        //        var Type = reader.GetString(3);
+        //        var sets = reader.GetInt32(4);
+        //        var reps = reader.GetInt32(5);
+        //        var weight = reader.GetFloat(6);
+        //        Lift lift = new Lift(id, ogTraining, ownerOfTraining, Type, sets, reps, weight);
 
-                if(lift.OwnerOfLift == U.Name && lift.OgTraining == NameOfTraining)
-                {
-                    Lifts.Add(lift);
-                }
-            }
-        }
+        //        if(lift.OwnerOfLift == U.Name && lift.OgTraining == NameOfTraining)
+        //        {
+        //            Lifts.Add(lift);
+        //        }
+        //    }
+        //}
 
         if (LiftPicker.SelectedItem == null)
         {
@@ -89,7 +92,7 @@ public partial class AddLift : ContentPage
             command.CommandText = $"INSERT INTO Lift(NameOfTraining, OwnerOfTraining, TypeOfLift, Sets, Reps, Weight) VALUES ('{l.OgTraining}', '{l.OwnerOfLift}', '{l.Type}', '{l.Sets}', '{l.Reps}', '{l.Weight}')";
             command.ExecuteNonQuery();
             connection.Close();
-            AddTraining AT = new AddTraining(U, DatumTreninku,NameOfTraining,l);
+            AddTraining AT = new AddTraining(U, DatumTreninku,NameOfTraining,l,fromEdit);
             App.Current.MainPage = AT;
         }        
     }

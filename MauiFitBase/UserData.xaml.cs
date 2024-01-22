@@ -9,16 +9,18 @@ public partial class UserData : ContentPage
     List<Training> Trainings = new List<Training>();
     public UserData(User u, Training? t)
 	{
+        
         U = u;
         var connectionString = "Data Source=Users.db;";
         var connection = new SqliteConnection(connectionString);
         connection.Open();
         var command = connection.CreateCommand();
+        //šifrovaná komunikace
         command.CommandText = "PRAGMA key='your-secret-key';";
         command.ExecuteNonQuery();
 
         
-
+        //Nahraje všechny tréninky uživatele
         command.CommandText = "SELECT * FROM Training";
         using (var reader = command.ExecuteReader())
         {
@@ -56,7 +58,11 @@ public partial class UserData : ContentPage
 
         InitializeComponent();
 		UserInfo.Text ="Welcome " + u.Name;
-        Seznam.ItemsSource = Trainings;
+        Trainings.Distinct();
+        //Odstranìní duplikátù které mùžou vznika pøi editaci tréninkù a seøazení podle data
+        var Treninky = Trainings.DistinctBy(i => i.NameOfTraining);
+        Treninky = Treninky.OrderBy(i => i.DateOfTraining);
+        Seznam.ItemsSource = Treninky;
 	}
 
     private void SignOut_Clicked(object sender, EventArgs e)
@@ -67,7 +73,7 @@ public partial class UserData : ContentPage
 
     private void AddTrainnigB_Clicked(object sender, EventArgs e)
     {
-        AddTraining AT = new AddTraining(U, null,null,null);
+        AddTraining AT = new AddTraining(U, null,null,null,false);
         App.Current.MainPage = AT;
     }
 
@@ -86,27 +92,30 @@ public partial class UserData : ContentPage
             Trainings.Remove(Ts);
             refresh();
 
+            //Odstraní trénink a všechny jeho cviky
             command.CommandText = $"DELETE FROM Training WHERE NameOfTraining = ('{Ts.NameOfTraining}') AND OwnerOfTraining = ('{Ts.Owner}')";
+            command.ExecuteNonQuery();
+            command.CommandText = $"DELETE FROM Lift WHERE NameOfTraining = ('{Ts.NameOfTraining}') AND OwnerOfTraining = ('{Ts.Owner}')";
             command.ExecuteNonQuery();
             connection.Close();
             
         }
     }
 
-    private void CreateExcersiseB_Clicked(object sender, EventArgs e)
-    {
-        CreateExcersise CE = new CreateExcersise();
-        App.Current.MainPage = CE;
-    }
-
-    private void DeleteExcersiseB_Clicked(object sender, EventArgs e)
-    {
-
-    }
-
+  
     private void refresh()
     {
         Seznam.ItemsSource = null;
         Seznam.ItemsSource = Trainings;
+    }
+
+    private void EditTrBtn_Clicked(object sender, EventArgs e)
+    {
+        Training SelTraining= Seznam.SelectedItem as Training;
+        if(SelTraining != null )
+        {
+            AddTraining AT = new AddTraining(U,SelTraining.DateOfTraining.ToDateTime(TimeOnly.Parse("10:00 PM")),SelTraining.NameOfTraining, null,true);
+            App.Current.MainPage = AT;
+        }
     }
 }
