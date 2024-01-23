@@ -11,9 +11,9 @@
         <Label Text="Your user Name" FontSize="25" HorizontalOptions="Center"/>
         <Entry x:Name="NewUserNameE" WidthRequest="175"/>
         <Label Text="Your new password" FontSize="25" HorizontalOptions="Center"/>
-        <Entry x:Name="NewPasswdE" WidthRequest="175"/>
+        <Entry x:Name="NewPasswdE" IsPassword="True" WidthRequest="175"/>
         <Label Text="Your new password again" FontSize="25" HorizontalOptions="Center"/>
-        <Entry x:Name="AgainPasswdE" WidthRequest="175"/>
+        <Entry x:Name="AgainPasswdE" IsPassword="True" WidthRequest="175"/>
 
         <HorizontalStackLayout HorizontalOptions="Center" Spacing="40">
             <Button x:Name="DoneB" Clicked="DoneB_Clicked" Text="Done" WidthRequest="75"/>
