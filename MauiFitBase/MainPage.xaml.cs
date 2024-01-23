@@ -62,18 +62,7 @@ public partial class MainPage : ContentPage
         {
             serializer.Serialize(writer, cviky);
         }
-        InitializeComponent();
-	}
 
-    public void ClearEntry()
-    {
-        LoginE.Text = string.Empty;
-        PasswdE.Text = string.Empty;
-    }
-
-    private void Login_Clicked(object sender, EventArgs e)
-    {
-        //Vytvoření DB a připojení k ní
         var connectionString = "Data Source=Users.db;";
         var connection = new SqliteConnection(connectionString);
         connection.Open();
@@ -95,6 +84,24 @@ public partial class MainPage : ContentPage
         command.ExecuteNonQuery();
 
         command.CommandText = "INSERT INTO Training( NameOfTraining, DateOfTraining, OwnerOfTraining) VALUES ( 'Trenink1', '2023-07-13' , 'Marek')";
+        command.ExecuteNonQuery();
+        InitializeComponent();
+	}
+
+    public void ClearEntry()
+    {
+        LoginE.Text = string.Empty;
+        PasswdE.Text = string.Empty;
+    }
+
+    private void Login_Clicked(object sender, EventArgs e)
+    {
+        //Vytvoření DB a připojení k ní
+        var connectionString = "Data Source=Users.db;";
+        var connection = new SqliteConnection(connectionString);
+        connection.Open();
+        var command = connection.CreateCommand();
+        command.CommandText = "PRAGMA key='your-secret-key';";
         command.ExecuteNonQuery();
 
         List<User> Users = new List<User>();
