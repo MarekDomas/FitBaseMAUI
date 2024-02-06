@@ -28,7 +28,7 @@ public partial class LiftOV : ContentPage
         command.CommandText = "PRAGMA key='your-secret-key';";
         command.ExecuteNonQuery();
 
-        command.CommandText = $"SELECT * FROM Lift WHERE ownerOfTraining = {U.Name}";
+        command.CommandText = $"SELECT * FROM Lift ";
         using (var reader = command.ExecuteReader())
         {
             while (reader.Read())
@@ -41,7 +41,11 @@ public partial class LiftOV : ContentPage
                 var reps = reader.GetInt32(5);
                 var weight = reader.GetFloat(6);
                 Lift lift = new Lift(id, ogTraining, ownerOfTraining, Type, sets, reps, weight);
-                Lifts.Add(lift);
+                if (lift.OwnerOfLift == U.Name)
+                {
+                    Lifts.Add(lift);
+                }
+                //Lifts.Add(lift);
             }
         }
 
