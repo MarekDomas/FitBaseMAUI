@@ -118,4 +118,10 @@ public partial class UserData : ContentPage
             App.Current.MainPage = AT;
         }
     }
+
+    private void GraphBtn_Clicked(object sender, EventArgs e)
+    {
+        LiftOV LOV = new LiftOV(U);
+        App.Current.MainPage= LOV;
+    }
 }
